@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Members | ClubPoint</title><link rel="stylesheet" href="/css/tokens.css" /><link rel="stylesheet" href="/css/base.css" /></head>
+<body><div id="adminShell"></div><main class="page"><div class="page-heading"><p class="eyebrow">Member management</p><h1>Members</h1><p class="muted">Download the Excel template and upload member data.</p></div>
+<section class="card"><h2>Excel member import</h2><div id="memberColumns" class="column-list"></div><p class="muted small">Uploads support up to 400 member rows and 3 additional columns. Additional columns are ignored.</p><p><a class="button-link" href="/api/admin/members/import/template" download>Download template</a></p><form id="memberImportForm"><label>Excel file (.xlsx or .xls)<input id="memberFile" type="file" accept=".xlsx,.xls" required /></label><button type="submit">Upload member data</button></form><p id="importMsg" class="msg" role="status"></p></section>
+</main><script src="/js/api.js"></script><script src="/js/admin-shell.js"></script><script src="/js/admin-members.js"></script></body></html>

@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QR sessions | ClubPoint</title><link rel="stylesheet" href="/css/tokens.css" /><link rel="stylesheet" href="/css/base.css" /></head>
+<body><div id="adminShell"></div><main class="page"><div class="page-heading"><p class="eyebrow">Attendance access</p><h1>QR sessions</h1><p class="muted">Generate a temporary QR code for an activity. The code contains only an opaque token and expires automatically.</p></div>
+<section class="card no-print"><h2>Generate a session</h2><form id="sessionForm" class="form-grid"><label>Activity<select name="activityId" id="sessionActivity" required></select></label><label>Starts at<input name="startsAt" type="datetime-local" /></label><label>Expires at<input name="expiresAt" type="datetime-local" /></label><button type="submit">Generate QR code</button></form><p id="sessionMsg" class="msg" role="status"></p></section>
+<section id="currentQr" class="card qr-card" hidden><div><h2 id="qrTitle">QR session</h2><p id="qrDetails" class="muted"></p><p class="small muted">Payload contains no member details.</p></div><img id="qrImage" alt="Attendance QR code" /><div class="qr-actions no-print"><a id="downloadQr" class="button-link" download="clubpoint-attendance-qr.png">Download</a><button id="printQr" type="button">Print</button></div></section>
+<section class="card"><h2>Sessions</h2><div id="sessionRows" class="session-list"></div></section>
+</main><script src="/js/api.js"></script><script src="/js/admin-shell.js"></script><script src="/js/admin-qr-sessions.js"></script></body></html>

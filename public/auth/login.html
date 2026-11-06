@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Member sign in | ClubPoint</title>
+  <link rel="stylesheet" href="/css/tokens.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+</head>
+<body>
+  <header class="top"><a class="brand" href="/">ClubPoint</a></header>
+  <main class="narrow">
+    <div class="card">
+      <h1>Member sign in</h1>
+      <p class="muted">Use the email and reference number on your club registration.</p>
+      <form id="loginForm" data-endpoint="/api/auth/member/login">
+        <label>Email<input type="email" name="email" required autocomplete="email" /></label>
+        <label>Reference number<input type="password" name="reference" required autocomplete="current-password" /></label>
+        <button type="submit">Sign in</button>
+        <p id="msg" class="msg" role="alert"></p>
+      </form>
+    </div>
+    <p class="muted small">Club administrator? <a href="/admin/login.html">Sign in here</a>.</p>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

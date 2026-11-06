@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClubPoint</title>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <style>
+    body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Segoe UI", system-ui, sans-serif; }
+    header { background: var(--navy); color: var(--white); padding: 1rem 1.5rem; font-weight: 700; font-size: 1.2rem; border-bottom: 4px solid var(--gold); }
+    main { max-width: 640px; margin: 1.5rem auto; padding: 0 1rem; }
+    .card { background: var(--white); border-radius: 8px; padding: 1.25rem; border: 1px solid #dde2e8; }
+    h2 { margin: 0 0 .25rem; color: var(--navy); font-size: 1.05rem; }
+    .ok { color: var(--teal); font-weight: 600; } .bad { color: #a8321f; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin-top: .75rem; }
+    td { padding: .35rem 0; border-bottom: 1px solid #e8ecf0; } td:last-child { text-align: right; color: var(--muted); }
+    p { color: var(--muted); margin: .25rem 0 0; }
+    .card + .card { margin-top: 1rem; } a { color: var(--teal); }
+  </style>
+</head>
+<body>
+  <header>ClubPoint</header>
+  <main>
+    <div class="card">
+      <h2>Sign in</h2>
+      <p><a href="/auth/login.html">Member sign in</a></p>
+      <p><a href="/admin/login.html">Administrator sign in</a></p>
+    </div>
+    <div class="card">
+      <h2>System status</h2>
+      <div id="status">Checking database...</div>
+      <table id="counts"></table>
+      <p>Members and administrators can sign in. More screens arrive in later phases.</p>
+    </div>
+  </main>
+  <script>
+    fetch('/api/health').then(async (r) => ({ ok: r.ok, body: await r.json() })).then(({ ok, body }) => {
+      const s = document.getElementById('status');
+      if (!ok) { s.innerHTML = '<span class="bad">Database unreachable.</span> ' + (body.error || ''); return; }
+      s.innerHTML = '<span class="ok">Database connected.</span>';
+      document.getElementById('counts').innerHTML = Object.entries(body.collections)
+        .map(([name, n]) => `<tr><td>${name}</td><td>${n}</td></tr>`).join('');
+    }).catch(() => { document.getElementById('status').innerHTML = '<span class="bad">Server not responding.</span>'; });
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "clubpoint",
+  "version": "0.1.0",
+  "description": "ClubPoint: club attendance, member performance and KPI points management",
+  "main": "server.js",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test",
+    "verify:models": "node scripts/verify-models.js",
+    "db:check": "node scripts/check-db.js",
+    "db:sync": "node scripts/check-db.js --sync",
+    "seed:dev": "node scripts/seed-dev.js",
+    "seed:reset": "node scripts/seed-dev.js --reset --confirm",
+    "admin:create": "node scripts/create-admin.js",
+    "test:integration": "node --test tests/integration/auth.test.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.1",
+    "qrcode": "^1.5.4",
+    "xlsx": "^0.18.5"
+  }
+}

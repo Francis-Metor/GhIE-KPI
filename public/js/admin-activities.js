@@ -1,0 +1,14 @@
+const activityMsg = document.getElementById('activityMsg');
+const activitySay = (text, ok) => { activityMsg.className = `msg ${ok ? 'ok' : 'err'}`; activityMsg.textContent = text; };
+const showDate = (value) => value ? new Date(value).toLocaleString() : 'Not set';
+async function loadActivities() {
+  const [{ venues, activities }, { criteria }] = await Promise.all([api('/api/admin/activities'), api('/api/admin/scoring')]);
+  document.getElementById('activityVenue').innerHTML = venues.filter((item) => item.isActive).map((item) => `<option value="${esc(item._id)}">${esc(item.name)} (${esc(item.defaultRadiusMeters)} m)</option>`).join('');
+  document.getElementById('attendanceCriterion').innerHTML = '<option value="">None</option>' + criteria.filter((item) => item.isActive && item.awardMethod === 'automatic').map((item) => `<option value="${esc(item._id)}">${esc(item.name)} (${esc(item.points)} points)</option>`).join('');
+  document.getElementById('venueRows').innerHTML = venues.map((item) => `<div class="manage-row"><span><strong>${esc(item.name)}</strong><br><span class="muted small">${esc(item.latitude)}, ${esc(item.longitude)} · ${esc(item.defaultRadiusMeters)} m</span></span><button class="quiet" data-venue-id="${esc(item._id)}" data-active="${item.isActive}">${item.isActive ? 'Deactivate' : 'Activate'}</button></div>`).join('');
+  document.getElementById('activityRows').innerHTML = activities.map((item) => `<div class="manage-row"><span><strong>${esc(item.title)}</strong><br><span class="muted small">${esc(item.venue?.name || 'Unknown')} · ${showDate(item.startsAt)} · ${esc(item.status)}</span></span></div>`).join('');
+}
+document.getElementById('venueForm').addEventListener('submit', async (event) => { event.preventDefault(); try { await api('/api/admin/activities/venues', { method: 'POST', body: Object.fromEntries(new FormData(event.target)) }); event.target.reset(); event.target.querySelector('[name="defaultRadiusMeters"]').value = '500'; activitySay('Venue created.', true); await loadActivities(); } catch (err) { activitySay(err.message, false); } });
+document.getElementById('activityForm').addEventListener('submit', async (event) => { event.preventDefault(); try { await api('/api/admin/activities', { method: 'POST', body: Object.fromEntries(new FormData(event.target)) }); event.target.reset(); activitySay('Activity created.', true); await loadActivities(); } catch (err) { activitySay(err.message, false); } });
+document.querySelector('.content-grid').addEventListener('click', async (event) => { const { venueId, active } = event.target.dataset; if (!venueId) return; try { await api(`/api/admin/activities/venues/${venueId}`, { method: 'PATCH', body: { isActive: active !== 'true' } }); await loadActivities(); activitySay('Venue status updated.', true); } catch (err) { activitySay(err.message, false); } });
+loadActivities().catch((err) => activitySay(err.message, false));

@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Administration | ClubPoint</title><link rel="stylesheet" href="/css/tokens.css" /><link rel="stylesheet" href="/css/base.css" /></head>
+<body><div id="adminShell"></div><main class="page"><div class="page-heading"><p class="eyebrow">Access</p><h1>Administration</h1><p class="muted">Manage administrator accounts and access.</p></div>
+<section class="card"><h2>Administrators</h2><table><thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Last sign-in</th><th></th></tr></thead><tbody id="adminRows"></tbody></table></section>
+<section class="card"><h2>Add an administrator</h2><form id="addForm" class="form-grid"><label>Name<input name="displayName" /></label><label>Email<input type="email" name="email" required /></label><label>Reference number<input type="password" name="reference" required minlength="6" /></label><button type="submit">Add administrator</button></form><p id="msg" class="msg" role="status"></p></section>
+</main><script src="/js/api.js"></script><script src="/js/admin-shell.js"></script><script src="/js/admin-administration.js"></script></body></html>

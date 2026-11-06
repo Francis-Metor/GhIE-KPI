@@ -1,0 +1,10 @@
+/* Design tokens from the ClubPoint specification, section 7 */
+:root {
+  --navy: #142b49;
+  --teal: #167d70;
+  --gold: #e9b949;
+  --bg: #f4f6f9;
+  --white: #ffffff;
+  --text: #263445;
+  --muted: #758195;
+}
