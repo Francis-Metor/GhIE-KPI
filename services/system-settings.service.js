@@ -4,7 +4,7 @@ const { HttpError } = require('../lib/http');
 const definitions = {
   attendanceRadiusMeters: { label: 'Default attendance radius (metres)', min: 10, max: 5000 },
   sessionExpiryMinutes: { label: 'Default QR session expiry (minutes)', min: 1, max: 1440 },
-  attendanceGpsAccuracyMaxMeters: { label: 'Maximum GPS accuracy (metres)', min: 1, max: 1000 },
+  attendanceGpsAccuracyMaxMeters: { label: 'Maximum GPS accuracy (metres)', min: 1, max: 10000 },
 };
 
 async function list() {

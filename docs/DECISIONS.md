@@ -30,7 +30,7 @@ An email and a reference number are not secret in the way a password is: anyone 
 |---------|-------|-------|
 | Radius limits per venue/activity | 10 to 5000 m (default 500 m from the spec) | `models/Venue.js` |
 | QR session expiry | 3 hours (180 minutes) | `models/SystemSetting.js` |
-| Maximum GPS accuracy accepted | 100 m | `models/SystemSetting.js` |
+| Default maximum GPS accuracy accepted | 100 m | `models/SystemSetting.js` |
 | Leaderboard default | private; public fields: name, department, total points | `models/PublicationSetting.js` |
 | Tie handling | competition ranking (1, 2, 2, 4) | `models/PublicationSetting.js` |
 
@@ -75,7 +75,7 @@ production domain; preview/local requests use their current host when the settin
 ## Phase 8 attendance contract
 
 Attendance submission is member-authenticated; member IDs are never accepted from the browser.
-The server checks the QR session, activity window, GPS accuracy (default maximum 100 m), and
+The server checks the QR session, activity window, GPS accuracy (default maximum 100 m; administrator-configurable up to 10,000 m), and
 Haversine distance to the configured venue radius. Rejected attempts are retained for audit,
 while the partial unique member/session index permits only one accepted attempt. Accepted
 attendance and its automatic point transaction are created in one MongoDB transaction when
