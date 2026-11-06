@@ -69,6 +69,9 @@ dl { display: grid; grid-template-columns: 9rem 1fr; gap: .35rem 1rem; margin: .
 dt { color: var(--muted); } dd { margin: 0; }
 .member-profile-heading { display: flex; align-items: center; gap: 1rem; }
 .member-profile-image { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; border: 2px solid #dde2e8; background: #f7f9fb; }
+.location-panel { margin: 1rem 0; padding: 1rem; background: #f7f9fb; border: 1px solid #dde2e8; border-radius: 8px; }
+.location-panel h2 { margin-top: 0; }
+.location-panel dl { margin-bottom: .75rem; }
 .column-list { display: flex; flex-wrap: wrap; gap: .4rem; margin: .75rem 0; }
 .column-chip { padding: .25rem .55rem; border: 1px solid #c8d0d9; border-radius: 99px; font-size: .85rem; }
 .column-chip strong { color: var(--teal); font-weight: 600; }

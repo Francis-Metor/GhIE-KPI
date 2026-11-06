@@ -83,7 +83,7 @@ async function validateToken(rawToken) {
   const token = String(rawToken || '').trim();
   if (!/^[A-Za-z0-9_-]{43}$/.test(token)) throw new HttpError(404, 'QR token not found or no longer valid.');
   const session = await AttendanceSession.findOne({ tokenHash: AttendanceSession.hashToken(token) })
-    .populate('activity', 'title startsAt endsAt status')
+    .populate('activity', 'title startsAt endsAt status radiusOverrideMeters')
     .populate('venue', 'name latitude longitude defaultRadiusMeters')
     .lean();
   const now = new Date();
@@ -95,6 +95,7 @@ async function validateToken(rawToken) {
     sessionId: session._id,
     activity: session.activity,
     venue: session.venue,
+    allowedRadiusMeters: session.activity.radiusOverrideMeters ?? session.venue?.defaultRadiusMeters ?? 500,
     startsAt: session.startsAt,
     expiresAt: session.expiresAt,
   };
