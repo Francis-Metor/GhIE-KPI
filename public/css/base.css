@@ -3,13 +3,13 @@ body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Seg
 a { color: var(--teal); }
 .top { background: var(--navy); color: var(--white); padding: .9rem 1.5rem; display: flex; align-items: center; gap: 1rem; border-bottom: 4px solid var(--gold); }
 .top .brand { padding: 0; border: 0; font-size: 1.2rem; }
-.sidebar { position: fixed; inset: 0 auto 0 0; width: 240px; background: var(--navy); color: #fff; padding: 1.25rem 1rem; display: flex; flex-direction: column; z-index: 20; }
+.sidebar { position: fixed; inset: 0 auto 0 0; width: 240px; background: var(--navy); color: #fff; padding: 1.25rem 1rem; display: flex; flex-direction: column; z-index: 20; overflow-y: auto; }
 .brand { color: #fff; text-decoration: none; font-size: 1.25rem; font-weight: 700; padding: .5rem .65rem 1.5rem; border-bottom: 1px solid #36506d; }
 .brand span { color: var(--gold); font-size: .85rem; }
 .sidebar nav { display: grid; gap: .35rem; padding-top: 1.25rem; }
 .sidebar nav a { color: #d7e1eb; text-decoration: none; padding: .7rem .75rem; border-radius: 6px; }
 .sidebar nav a:hover, .sidebar nav a.active { background: #244463; color: #fff; }
-.sidebar-bottom { margin-top: auto; display: grid; gap: .75rem; border-top: 1px solid #36506d; padding: 1rem .65rem 0; }
+.sidebar-bottom { margin-top: auto; display: grid; gap: .75rem; border-top: 1px solid #36506d; padding: 1rem .65rem 0; flex-shrink: 0; }
 .sidebar-user { color: #c9d3e0; font-size: .8rem; overflow-wrap: anywhere; }
 .sidebar-signout { background: transparent; border-color: #6d849b; text-align: left; }
 .mobile-bar { display: none; }
