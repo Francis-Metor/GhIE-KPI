@@ -61,11 +61,11 @@ async function report(query = {}) {
     } },
   ]) : [];
 
-  const categories = await Category.find().select('name').sort({ displayOrder: 1, name: 1 }).lean();
+  const categories = await Category.find({ isActive: true }).select('name').sort({ displayOrder: 1, name: 1 }).lean();
   const categoryMap = new Map(categories.map((category) => [String(category._id), { id: String(category._id), name: category.name }]));
   grouped.forEach((entry) => {
     const id = String(entry._id.category);
-    if (!categoryMap.has(id)) categoryMap.set(id, { id, name: entry.categoryName || 'Uncategorized' });
+    if (!categoryMap.has(id)) return;
   });
   const categoryList = [...categoryMap.values()];
   const groupedByMember = new Map();

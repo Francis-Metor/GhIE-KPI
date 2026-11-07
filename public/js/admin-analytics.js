@@ -7,10 +7,7 @@ const queryString = () => {
 };
 const points = (value) => Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
 function renderSummary() {
-  const { memberCount, transactionCount, totalPoints } = report.summary;
-  document.getElementById('summaryCards').innerHTML = [
-    ['Members', memberCount], ['Transactions', transactionCount], ['Total points', points(totalPoints)],
-  ].map(([label, value]) => `<div class="summary-card"><span>${label}</span><strong>${value}</strong></div>`).join('');
+  document.getElementById('summaryCards').innerHTML = `<div class="summary-card"><span>Members</span><strong>${report.summary.memberCount}</strong></div>`;
 }
 function renderBars(targetId, items, labelKey) {
   const target = document.getElementById(targetId);
@@ -22,8 +19,8 @@ function renderBars(targetId, items, labelKey) {
   }).join('') : '<p class="muted">No ledger data for these filters.</p>';
 }
 function renderTable() {
-  document.getElementById('scoreHead').innerHTML = `<tr><th>Member</th><th>Department</th>${report.categories.map((category) => `<th>${esc(category.name)}</th>`).join('')}<th>Total</th><th>Transactions</th></tr>`;
-  document.getElementById('scoreBody').innerHTML = report.rows.map((row) => `<tr><td><strong>${esc(row.fullName)}</strong><br><span class="muted small">${esc(row.memberId)}</span></td><td>${esc(row.department)}</td>${report.categories.map((category) => `<td>${points(row.categoryPoints[category.id])}</td>`).join('')}<td><strong>${points(row.totalPoints)}</strong></td><td>${row.transactions}</td></tr>`).join('') || '<tr><td colspan="99" class="muted">No members match these filters.</td></tr>';
+  document.getElementById('scoreHead').innerHTML = `<tr><th>Member</th><th>Department</th>${report.categories.map((category) => `<th>${esc(category.name)}</th>`).join('')}<th>Total</th></tr>`;
+  document.getElementById('scoreBody').innerHTML = report.rows.map((row) => `<tr><td><strong>${esc(row.fullName)}</strong><br><span class="muted small">${esc(row.memberId)}</span></td><td>${esc(row.department)}</td>${report.categories.map((category) => `<td>${points(row.categoryPoints[category.id])}</td>`).join('')}<td><strong>${points(row.totalPoints)}</strong></td></tr>`).join('') || '<tr><td colspan="99" class="muted">No members match these filters.</td></tr>';
 }
 async function loadReport() {
   const query = queryString();
