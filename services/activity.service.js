@@ -34,19 +34,19 @@ async function findActivity(id) {
   return activity;
 }
 
-async function findCriterion(id) {
+async function findCriterion(id, label = 'Attendance criterion') {
   if (!id) return undefined;
-  if (!mongoose.isValidObjectId(id)) throw new HttpError(400, 'Attendance criterion is invalid.');
+  if (!mongoose.isValidObjectId(id)) throw new HttpError(400, `${label} is invalid.`);
   const criterion = await Criterion.findById(id);
-  if (!criterion) throw new HttpError(400, 'Attendance criterion was not found.');
-  if (criterion.awardMethod !== 'automatic') throw new HttpError(400, 'Attendance criterion must use the automatic award method.');
+  if (!criterion) throw new HttpError(400, `${label} was not found.`);
+  if (criterion.awardMethod !== 'automatic') throw new HttpError(400, `${label} must use the automatic award method.`);
   return criterion;
 }
 
 async function listActivities() {
   const [venues, activities] = await Promise.all([
     Venue.find().sort({ isActive: -1, name: 1 }).lean(),
-    Activity.find().populate('venue', 'name defaultRadiusMeters').populate('attendanceCriterion', 'name points').sort({ startsAt: -1 }).lean(),
+    Activity.find().populate('venue', 'name defaultRadiusMeters').populate('attendanceCriterion', 'name points').populate('punctualityCriterion', 'name points').sort({ startsAt: -1 }).lean(),
   ]);
   return { venues, activities };
 }
@@ -80,6 +80,10 @@ async function updateVenue(id, input, actor) {
 }
 
 function activityValues(input, createdBy) {
+  if (input.punctualityCriterion && input.attendanceCriterion
+    && String(input.punctualityCriterion) === String(input.attendanceCriterion)) {
+    throw new HttpError(400, 'Punctuality criterion must be different from the attendance criterion.');
+  }
   const values = {
     title: text(input.title),
     description: text(input.description),
@@ -89,6 +93,10 @@ function activityValues(input, createdBy) {
     venue: input.venue,
     radiusOverrideMeters: input.radiusOverrideMeters === '' || input.radiusOverrideMeters === undefined ? null : numberValue(input.radiusOverrideMeters, 'Activity radius'),
     attendanceCriterion: input.attendanceCriterion || undefined,
+    punctualityCriterion: input.punctualityCriterion || undefined,
+    punctualityWindowMinutes: input.punctualityCriterion
+      ? numberValue(input.punctualityWindowMinutes, 'Punctuality time limit')
+      : null,
     attendanceWindow: {
       opensAt: dateValue(input.attendanceOpensAt ?? input.attendanceWindow?.opensAt, 'Attendance opening time'),
       closesAt: dateValue(input.attendanceClosesAt ?? input.attendanceWindow?.closesAt, 'Attendance closing time'),
@@ -102,6 +110,7 @@ function activityValues(input, createdBy) {
 async function createActivity(input, actor) {
   await findVenue(input.venue);
   await findCriterion(input.attendanceCriterion);
+  await findCriterion(input.punctualityCriterion, 'Punctuality criterion');
   const activity = await Activity.create(activityValues(input, actor._id));
   await AuditLog.create({ actor: actor._id, actorRole: 'admin', action: 'activity.create', targetType: 'Activity', targetId: activity._id, summary: `Activity ${activity.title} created` });
   return activity;
@@ -112,6 +121,7 @@ async function updateActivity(id, input, actor) {
   const values = activityValues({ ...activity.toObject(), ...input }, activity.createdBy);
   await findVenue(values.venue);
   await findCriterion(values.attendanceCriterion);
+  await findCriterion(values.punctualityCriterion, 'Punctuality criterion');
   Object.assign(activity, values);
   await activity.save();
   await AuditLog.create({ actor: actor._id, actorRole: 'admin', action: 'activity.update', targetType: 'Activity', targetId: activity._id, summary: `Activity ${activity.title} updated` });

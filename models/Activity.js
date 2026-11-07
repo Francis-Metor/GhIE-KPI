@@ -17,6 +17,12 @@ const activitySchema = new mongoose.Schema(
       validate: [(v) => v === null || (v >= RADIUS_LIMITS.min && v <= RADIUS_LIMITS.max), `Radius must be between ${RADIUS_LIMITS.min} and ${RADIUS_LIMITS.max} m.`],
     },
     attendanceCriterion: { type: ObjectId, ref: 'Criterion' }, // the automatic criterion awarded for attending
+    punctualityCriterion: { type: ObjectId, ref: 'Criterion' }, // optional automatic criterion for early attendance
+    punctualityWindowMinutes: {
+      type: Number,
+      default: null,
+      validate: [(v) => v === null || (Number.isInteger(v) && v >= 1 && v <= 1440), 'Punctuality time limit must be between 1 and 1440 minutes.'],
+    },
     attendanceWindow: { opensAt: Date, closesAt: Date },
     status: { type: String, enum: ['draft', 'scheduled', 'completed', 'cancelled'], default: 'scheduled' },
     createdBy: { type: ObjectId, ref: 'User' },

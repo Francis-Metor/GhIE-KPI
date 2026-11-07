@@ -39,9 +39,9 @@ transactionSchema.index({ member: 1, 'criterionSnapshot.category': 1 });
 transactionSchema.index({ 'criterionSnapshot.criterion': 1, member: 1 });
 transactionSchema.index({ activity: 1 });
 transactionSchema.index({ batchId: 1 }, { sparse: true });
-// A transaction can be reversed once, and one attendance record earns points once.
+// A transaction can be reversed once; each attendance criterion can earn once per record.
 transactionSchema.index({ reversalOf: 1 }, { unique: true, partialFilterExpression: { reversalOf: { $type: 'objectId' } } });
-transactionSchema.index({ attendanceRecord: 1 }, { unique: true, partialFilterExpression: { attendanceRecord: { $type: 'objectId' } } });
+transactionSchema.index({ attendanceRecord: 1, 'criterionSnapshot.criterion': 1 }, { unique: true, partialFilterExpression: { attendanceRecord: { $type: 'objectId' } } });
 
 transactionSchema.pre('validate', function () {
   if (this.source === 'attendance') {

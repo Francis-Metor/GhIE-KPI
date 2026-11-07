@@ -56,6 +56,10 @@ async function submitAttendance({ token, location, memberId }) {
   if (distance > allowedRadiusMeters) return rejected(`You are outside the attendance radius (${Math.round(distance)} m away; ${allowedRadiusMeters} m allowed).`);
   const criterion = activity.attendanceCriterion;
   if (!criterion || criterion.awardMethod !== 'automatic' || !criterion.category) throw new HttpError(409, 'This activity has no valid automatic attendance criterion.');
+  const punctuality = activity.punctualityCriterion;
+  const punctualityCutoff = punctuality && activity.punctualityWindowMinutes
+    ? new Date(new Date(activity.startsAt).getTime() + activity.punctualityWindowMinutes * 60 * 1000)
+    : null;
 
   try {
     return await runInTransaction(async (dbSession) => {
@@ -72,9 +76,21 @@ async function submitAttendance({ token, location, memberId }) {
         activity: activity._id, attendanceRecord: record._id,
       });
       await transaction.save({ session: dbSession || undefined });
+      let punctualityTransaction;
+      if (punctuality && punctuality.awardMethod === 'automatic' && punctuality.category && punctualityCutoff && new Date() <= punctualityCutoff) {
+        punctualityTransaction = new PointTransaction({
+          member: memberId, points: punctuality.points, kind: 'award', source: 'attendance',
+          criterionSnapshot: PointTransaction.snapshotFor(punctuality, punctuality.category),
+          activity: activity._id, attendanceRecord: record._id,
+        });
+        await punctualityTransaction.save({ session: dbSession || undefined });
+      }
       record.pointTransaction = transaction._id;
       await record.save({ session: dbSession || undefined });
-      return { accepted: true, duplicate: false, attendanceRecordId: record._id, pointTransactionId: transaction._id, points: transaction.points };
+      return {
+        accepted: true, duplicate: false, attendanceRecordId: record._id, pointTransactionId: transaction._id,
+        punctualityAwarded: Boolean(punctualityTransaction), points: transaction.points + (punctualityTransaction?.points || 0),
+      };
     });
   } catch (error) {
     if (error?.code === 11000) {
