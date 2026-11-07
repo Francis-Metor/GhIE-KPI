@@ -38,6 +38,8 @@ async function build(query = {}, { requirePublic = true } = {}) {
   if (requirePublic && !setting.isPublicAt()) throw new HttpError(404, 'Leaderboard is not available.');
   const selectedCategory = categoryId(query.category);
   const match = selectedCategory ? { 'criterionSnapshot.category': selectedCategory } : {};
+  const activeMembers = await Member.find({ status: 'active' }).select('_id').lean();
+  match.member = { $in: activeMembers.map((member) => member._id) };
   const grouped = await PointTransaction.aggregate([
     { $match: match },
     { $group: { _id: '$member', totalPoints: { $sum: '$points' }, transactions: { $sum: 1 } } },

@@ -1,4 +1,4 @@
-const { AttendanceRecord, PointTransaction, ImportHistory, AuditLog } = require('../models');
+const { AttendanceRecord, PointTransaction, ImportHistory, AuditLog, Member } = require('../models');
 
 function date(value, end) {
   if (!value) return undefined;
@@ -31,6 +31,8 @@ async function attendance(query = {}) {
 async function scoring(query = {}) {
   const match = { ...range(query, 'createdAt') };
   if (query.source && ['attendance', 'manual', 'bulk'].includes(query.source)) match.source = query.source;
+  const activeMembers = await Member.find({ status: 'active' }).select('_id').lean();
+  match.member = { $in: activeMembers.map((member) => member._id) };
   const rows = await PointTransaction.find(match)
     .populate('member', 'memberId fullName department')
     .populate('awardedBy', 'email displayName')
