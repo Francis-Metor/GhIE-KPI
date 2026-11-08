@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PUBLIC_FIELDS = ['fullName', 'memberId', 'department', 'profileImageUrl', 'totalPoints'];
+const PUBLIC_FIELDS = ['fullName', 'memberId', 'department', 'profileImageUrl', 'memberType', 'totalPoints'];
 
 // One document per published view. Today only the leaderboard exists.
 const publicationSchema = new mongoose.Schema(

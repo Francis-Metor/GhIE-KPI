@@ -14,6 +14,7 @@ const memberSchema = new mongoose.Schema(
     email: { type: String, trim: true, lowercase: true, validate: [emailOk, 'Email is not valid.'] },
     phone: { type: String, trim: true },
     profileImageUrl: { type: String, trim: true, validate: [urlOk, 'Profile image must be an http(s) URL.'] },
+    memberType: { type: String, enum: ['executive', 'non-executive'], default: 'executive', index: true },
     status: { type: String, enum: ['active', 'inactive'], default: 'active', index: true },
     deactivatedAt: Date,
   },

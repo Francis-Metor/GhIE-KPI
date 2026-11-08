@@ -10,7 +10,7 @@ async function attachUser(req, res, next) {
     const payload = verifySession(readSessionCookie(req));
     if (payload) {
       await db.connectDB();
-      const user = await User.findById(payload.sub).populate('member', 'status');
+      const user = await User.findById(payload.sub).populate('member', 'status memberType');
       const memberOk = user?.role !== 'member' || user.member?.status === 'active';
       if (user && user.status === 'active' && user.role === payload.role && memberOk) req.user = user;
     }

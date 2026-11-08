@@ -3,8 +3,8 @@ const say = (text, ok) => { const msg = document.getElementById('leaderboardMsg'
 const localDate = (value) => value ? new Date(value).toISOString().slice(0, 16) : '';
 function renderPreview(data) {
   const fields = data.publicFields;
-  document.getElementById('previewHead').innerHTML = `<tr><th>Rank</th>${fields.includes('fullName') ? '<th>Member</th>' : ''}${fields.includes('memberId') ? '<th>Member ID</th>' : ''}${fields.includes('department') ? '<th>Department</th>' : ''}${fields.includes('totalPoints') ? '<th>Points</th>' : ''}</tr>`;
-  document.getElementById('previewRows').innerHTML = data.rows.map((row) => `<tr><td>${row.rank}</td>${row.fullName === undefined ? '' : `<td>${esc(row.fullName)}</td>`}${row.memberId === undefined ? '' : `<td>${esc(row.memberId)}</td>`}${row.department === undefined ? '' : `<td>${esc(row.department)}</td>`}${row.totalPoints === undefined ? '' : `<td>${row.totalPoints}</td>`}</tr>`).join('') || '<tr><td colspan="5" class="muted">No points recorded.</td></tr>';
+  document.getElementById('previewHead').innerHTML = `<tr><th>Rank</th>${fields.includes('fullName') ? '<th>Member</th>' : ''}${fields.includes('memberId') ? '<th>Member ID</th>' : ''}${fields.includes('department') ? '<th>Department</th>' : ''}${fields.includes('memberType') ? '<th>Member type</th>' : ''}${fields.includes('totalPoints') ? '<th>Points</th>' : ''}</tr>`;
+  document.getElementById('previewRows').innerHTML = data.rows.map((row) => `<tr><td>${row.rank}</td>${row.fullName === undefined ? '' : `<td>${esc(row.fullName)}</td>`}${row.memberId === undefined ? '' : `<td>${esc(row.memberId)}</td>`}${row.department === undefined ? '' : `<td>${esc(row.department)}</td>`}${row.memberType === undefined ? '' : `<td>${esc(row.memberType)}</td>`}${row.totalPoints === undefined ? '' : `<td>${row.totalPoints}</td>`}</tr>`).join('') || '<tr><td colspan="6" class="muted">No points recorded.</td></tr>';
 }
 async function load() {
   const { setting } = await api('/api/admin/leaderboard/settings');

@@ -1,0 +1,194 @@
+GhIE-UMaT KPI landing page implementation prompts
+
+Purpose
+-------
+Use these prompts one at a time to evolve public/index.html into a welcoming
+GhIE-UMaT Chapter landing page inspired by the information architecture of
+https://ghie.org.gh/. Do not copy the referenced site's protected text, images,
+logos, or code. Use chapter-approved content and locally stored or licensed
+assets.
+
+Project context
+---------------
+- Application: Node.js, Express, MongoDB, plain HTML/CSS/JavaScript.
+- Landing page: public/index.html.
+- Landing-page assets: public/images/.
+- Existing member sign-in: /auth/login.html.
+- Existing administrator sign-in: /admin/login.html.
+- Existing public leaderboard: /leaderboard/index.html.
+- Existing health endpoint: /api/health.
+- The landing page must remain usable on mobile devices.
+- Do not change the colors or layout of admin, member, attendance, or other
+  application pages unless a prompt explicitly requests it.
+
+Prompt 1 - Inspect and plan the landing page
+---------------------------------------------
+Inspect public/index.html, public/css/tokens.css, public/images/, and the
+Express static-file configuration. Compare the current landing page structure
+with the high-level sections of https://ghie.org.gh/: hero, institution
+introduction, functions or benefits, calls to action, news/events, sponsors or
+partners, governing documents, statistics, and footer. Produce a short
+implementation plan without editing files. Identify which content needs
+chapter-provided approval and which assets are missing.
+
+Prompt 2 - Establish the landing-page design system
+---------------------------------------------------
+Update only the landing page styling. Create scoped classes or page-level CSS
+variables for a professional blue-black and white GhIE-UMaT KPI palette,
+responsive spacing, typography, buttons, cards, navigation, and footer. Keep
+the current favicon path and preserve the member and administrator sign-in
+links. Do not modify shared CSS files unless there is no safe alternative.
+Check keyboard focus, readable contrast, reduced-motion behavior, and mobile
+layout.
+
+Prompt 3 - Build the header and hero section
+---------------------------------------------
+Create a welcoming header for "GhIE-UMaT KPI" with the chapter logo or
+favicon from public/images/ when an approved logo is available. Add a clear
+navigation area with links to About, Activities, Leaderboard, Member Sign in,
+and Administrator Sign in. Build a hero section with chapter-approved
+headline, short description, primary call to action, secondary call to
+action, and one optimized local image. Use descriptive alt text and avoid
+inventing official claims.
+
+Prompt 4 - Add the chapter introduction
+---------------------------------------
+Add an About or Introduction section explaining the GhIE-UMaT Chapter's
+purpose, community, and connection to engineering development. Use editable
+placeholder content where chapter text has not yet been supplied. Add a
+secondary image only if an approved asset exists. Keep content concise and
+ensure the section is readable without JavaScript.
+
+Prompt 5 - Add functions and member benefits
+---------------------------------------------
+Create a responsive grid of 3 to 6 cards describing chapter functions or
+member benefits, such as professional development, networking, volunteering,
+leadership, events, and recognition. Use chapter-approved wording. Add
+accessible headings and avoid presenting unimplemented application features as
+available services.
+
+Prompt 6 - Add activities and calls to action
+----------------------------------------------
+Add a section promoting chapter activities and participation. If a safe public
+API is available, load published activities through that API; otherwise use
+static approved content or a clearly marked empty state. Do not expose private
+member data. Include links to member sign-in and the published leaderboard
+where appropriate.
+
+Prompt 7 - Add the published leaderboard entry point
+----------------------------------------------------
+Keep the leaderboard server-authorized. Add a public "View leaderboard" link
+that points to /leaderboard/index.html, but do not assume the leaderboard is
+published. If the page checks availability, treat a 404/unpublished response
+as a normal hidden state and do not display an error to visitors. Never expose
+phone numbers, email addresses, or private member fields.
+
+Prompt 8 - Add governing documents and useful links
+---------------------------------------------------
+Add a documents or resources section with links supplied by the chapter, such
+as constitution, bye-laws, code of ethics, policies, and contact information.
+Use safe external links with target="_blank" and rel="noopener" where needed.
+Do not scrape or reproduce documents from the reference site. If no approved
+links exist, render a clear placeholder that can be replaced later.
+
+Prompt 9 - Add sponsors or partners
+-----------------------------------
+Add a sponsors or partners section only when the chapter provides approved
+names, logos, and permissions. Store local logos in public/images/sponsors/ or
+use approved CDN URLs. Add meaningful alt text. Do not hotlink images from
+Google Drive or scrape sponsor assets from another website. Use a graceful
+empty state when no sponsors have been configured.
+
+Prompt 10 - Add the executive display
+-------------------------------------
+Add an "Our Executives" or "Chapter Leadership" section to introduce the
+current GhIE-UMaT Chapter executives. Display only profiles approved for public
+publication, with each profile containing the person's name, role, department
+or professional designation when approved, and an optional local profile
+image. Use a responsive card or grouped leadership layout that works on mobile
+and desktop. Add meaningful image alt text and a short empty state if no
+executive profiles have been approved.
+
+Do not expose private member fields such as phone numbers, personal email
+addresses, member IDs, scores, attendance, or account status. Do not assume
+that every member marked as executive is a public office holder: create a
+separate approved display list or configuration for public leadership profiles.
+If profiles are loaded from an API, return only an explicit public allowlist,
+validate image URLs, escape text, and handle unavailable data without breaking
+the landing page. Store approved profile images in public/images/executives/
+or another documented local asset directory, and obtain permission before
+publishing names or photographs.
+
+Prompt 11 - Add chapter statistics
+----------------------------------
+Add a "GhIE-UMaT in numbers" section only for figures that are approved and
+available from a trusted source. If values are loaded from an API, validate
+the response and show a non-sensitive fallback when the API is unavailable.
+Do not expose database collection counts or internal health details on the
+public landing page.
+
+Prompt 12 - Add the footer
+--------------------------
+Create a footer with the chapter name, approved contact details, social links,
+quick links, copyright text, and a short privacy notice. Use placeholders for
+unknown values rather than fabricated addresses, phone numbers, or social
+accounts. Keep the footer accessible and responsive.
+
+Prompt 13 - Optimize images and assets
+--------------------------------------
+Review every image used by the landing page. Prefer WebP or optimized PNG/JPG,
+provide width and height attributes, use loading="lazy" below the fold, and
+keep the hero image eager-loaded only when appropriate. Store static assets in
+public/images/ and reference them with absolute public paths such as
+/images/landing/hero.webp. Do not store image binaries in MongoDB. Confirm the
+favicon points to the approved file.
+
+Prompt 14 - Add content configuration only if needed
+-----------------------------------------------------
+If repeated editing of public/index.html becomes inconvenient, extract
+non-sensitive landing-page content into a small local configuration module or
+JSON file. Do not create an admin upload feature yet. Keep links, labels, and
+image paths validated and escaped. Avoid introducing a database dependency for
+static content.
+
+Prompt 15 - Accessibility and responsive QA
+--------------------------------------------
+Test the landing page at mobile, tablet, laptop, and wide desktop widths.
+Verify keyboard navigation, visible focus states, heading order, link names,
+alt text, color contrast, no horizontal overflow, and graceful behavior when
+images or optional API responses fail. Keep the sign-in actions easy to find.
+
+Prompt 16 - Security and privacy review
+---------------------------------------
+Review the landing page for external resource risks, unsafe innerHTML, open
+redirects, private data exposure, untrusted URLs, and accidental disclosure of
+database health details. Keep public leaderboard visibility enforced by the
+server. Use allowlisted URLs and text escaping for any dynamic content.
+
+Prompt 17 - Validate and deploy
+-------------------------------
+Run the smallest relevant checks after implementation:
+- node --check on any changed JavaScript files
+- npm test
+- git diff --check
+- manual browser checks for /, /auth/login.html, /admin/login.html, and
+  /leaderboard/index.html
+Confirm that Vercel serves all files under public/images/. Commit only the
+intended landing-page files, push to main, and verify the deployed URL on
+mobile and desktop.
+
+Content and asset checklist
+---------------------------
+- Official chapter name and approved tagline
+- Approved chapter logo and favicon
+- Hero image with permission to publish
+- About text
+- Functions or benefits
+- Approved executive names, roles, and profile images
+- Activities or events
+- Governing document links
+- Sponsor names and approved logos
+- Statistics and their source
+- Contact details
+- Social media URLs
+- Copyright and privacy wording

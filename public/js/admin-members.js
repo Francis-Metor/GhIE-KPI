@@ -22,7 +22,7 @@ async function loadMembers() {
     document.getElementById('memberPage').textContent = `Page ${result.pagination.page} of ${pages} (${result.pagination.total} members)`;
     document.getElementById('previousMembers').disabled = page <= 1;
     document.getElementById('nextMembers').disabled = page >= pages;
-    document.getElementById('memberRows').innerHTML = result.members.map((member) => `<tr><td>${esc(member.memberId)}</td><td>${esc(member.fullName)}</td><td>${esc(member.department || '—')}</td><td>${esc(member.email || '—')}</td><td>${esc(member.phone || '—')}</td><td><span class="pill ${member.status === 'active' ? '' : 'off'}">${esc(member.status)}</span></td><td><button type="button" class="quiet edit-member" data-member-id="${esc(member.id)}">Edit</button></td></tr>`).join('') || '<tr><td colspan="7" class="muted">No members found.</td></tr>';
+    document.getElementById('memberRows').innerHTML = result.members.map((member) => `<tr><td>${esc(member.memberId)}</td><td>${esc(member.fullName)}</td><td>${esc(member.department || '—')}</td><td>${esc(member.memberType || 'executive')}</td><td>${esc(member.email || '—')}</td><td>${esc(member.phone || '—')}</td><td><span class="pill ${member.status === 'active' ? '' : 'off'}">${esc(member.status)}</span></td><td><button type="button" class="quiet edit-member" data-member-id="${esc(member.id)}">Edit</button></td></tr>`).join('') || '<tr><td colspan="8" class="muted">No members found.</td></tr>';
     document.querySelectorAll('.edit-member').forEach((button) => button.addEventListener('click', () => openEditor(result.members.find((member) => member.id === button.dataset.memberId))));
     say(memberListMsg, '', true);
   } catch (error) { say(memberListMsg, error.message, false); }

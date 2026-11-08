@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Member, AuditLog } = require('../models');
 const { HttpError } = require('../lib/http');
 
-const editableFields = ['memberId', 'fullName', 'department', 'email', 'phone', 'profileImageUrl', 'status'];
+const editableFields = ['memberId', 'fullName', 'department', 'email', 'phone', 'profileImageUrl', 'memberType', 'status'];
 
 function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -17,6 +17,7 @@ function publicMember(member) {
     email: member.email || '',
     phone: member.phone || '',
     profileImageUrl: member.profileImageUrl || '',
+    memberType: member.memberType || 'executive',
     status: member.status,
     createdAt: member.createdAt,
     updatedAt: member.updatedAt,
@@ -34,7 +35,7 @@ async function listMembers({ search = '', status = '', page = 1, limit = 25 } = 
     query.$or = [{ memberId: expression }, { fullName: expression }, { department: expression }, { email: expression }];
   }
   const [members, total] = await Promise.all([
-    Member.find(query).select('memberId fullName department email phone profileImageUrl status createdAt updatedAt')
+    Member.find(query).select('memberId fullName department email phone profileImageUrl memberType status createdAt updatedAt')
       .sort({ fullName: 1, memberId: 1 }).skip((safePage - 1) * safeLimit).limit(safeLimit).lean(),
     Member.countDocuments(query),
   ]);

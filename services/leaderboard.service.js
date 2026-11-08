@@ -33,20 +33,27 @@ function categoryId(value) {
   return new mongoose.Types.ObjectId(value);
 }
 
-async function build(query = {}, { requirePublic = true } = {}) {
+async function build(query = {}, { requirePublic = true, user = null } = {}) {
   const setting = await PublicationSetting.getLeaderboard();
   if (requirePublic && !setting.isPublicAt()) throw new HttpError(404, 'Leaderboard is not available.');
   const selectedCategory = categoryId(query.category);
   const match = selectedCategory ? { 'criterionSnapshot.category': selectedCategory } : {};
   const activeMembers = await Member.find({ status: 'active' }).select('_id').lean();
   match.member = { $in: activeMembers.map((member) => member._id) };
+  if (user?.role === 'member') {
+    const memberType = user.member?.memberType || 'executive';
+    match.member = { $in: (await Member.find({
+      status: 'active',
+      memberType: memberType === 'executive' ? { $in: ['executive', null] } : memberType,
+    }).select('_id').lean()).map((member) => member._id) };
+  }
   const grouped = await PointTransaction.aggregate([
     { $match: match },
     { $group: { _id: '$member', totalPoints: { $sum: '$points' }, transactions: { $sum: 1 } } },
     { $sort: { totalPoints: -1, _id: 1 } },
   ]);
   const members = grouped.length ? await Member.find({ _id: { $in: grouped.map((row) => row._id) } })
-    .select('memberId fullName department profileImageUrl').lean() : [];
+    .select('memberId fullName department profileImageUrl memberType').lean() : [];
   const byId = new Map(members.map((member) => [String(member._id), member]));
   const ranked = rankRows(grouped.map((row) => {
     const member = byId.get(String(row._id)) || {};
