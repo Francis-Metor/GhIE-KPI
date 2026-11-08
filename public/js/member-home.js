@@ -3,6 +3,15 @@ const date = (value) => value ? new Date(value).toLocaleString() : '—';
 const points = (value) => Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
 const empty = (message, columns) => `<tr><td colspan="${columns}" class="muted">${message}</td></tr>`;
 
+async function showPublishedLeaderboard() {
+  try {
+    await api('/api/leaderboard');
+    document.getElementById('leaderboardLink').hidden = false;
+  } catch (error) {
+    if (error.status !== 404) console.error('Unable to check leaderboard publication status.', error);
+  }
+}
+
 function imageUrlForBrowser(value) {
   if (!value) return '';
   try {
@@ -20,6 +29,7 @@ function imageUrlForBrowser(value) {
 
 (async () => {
   try {
+    showPublishedLeaderboard();
     const portal = await api('/api/member/portal');
     const { member, summary } = portal;
     document.getElementById('hello').textContent = `Welcome, ${member.fullName}`;

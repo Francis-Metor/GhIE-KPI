@@ -9,7 +9,7 @@ const AUDIT_ACTIONS = [
   'venue.create', 'venue.update', 'activity.create', 'activity.update',
   'session.create', 'session.revoke',
   'points.award', 'points.bulk_award', 'points.reverse', 'points.correct',
-  'leaderboard.publish', 'leaderboard.unpublish', 'leaderboard.schedule',
+  'leaderboard.publish', 'leaderboard.unpublish', 'leaderboard.schedule', 'leaderboard.settings.update',
   'settings.update', 'auth.login_failed', 'export.run',
   'admin.create', 'admin.disable', 'admin.enable', 'admin.reset_reference',
 ];

@@ -95,6 +95,8 @@ dt { color: var(--muted); } dd { margin: 0; }
 .selected-chip button { background: transparent; border: 0; color: inherit; padding: 0; line-height: 1; }
 .top { flex-wrap: wrap; }
 .top .who { margin-left: auto; overflow-wrap: anywhere; }
+.member-nav-link { color: #d7e1eb; text-decoration: none; font-weight: 600; }
+.member-nav-link:hover { color: #fff; }
 .top .ghost { margin-left: 0; }
 .public-page { max-width: 1180px; margin: 0 auto; padding: 2rem; }
 fieldset { border: 1px solid #c8d0d9; border-radius: 6px; margin-top: .75rem; padding: .5rem .75rem .75rem; }
